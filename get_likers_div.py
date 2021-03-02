@@ -48,4 +48,3 @@ def get_likers_div(username: str, user_password: str, url: str):
 
 
 
-get_likers_div("noalfig6@gmail.com","a4b3c2d1","https://www.facebook.com/afula.live/photos/pcb.4032054813581135/4032054610247822/")
