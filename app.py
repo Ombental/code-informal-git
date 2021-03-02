@@ -1,9 +1,16 @@
 import secrets
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
 
 security = HTTPBasic()
 
@@ -20,10 +27,10 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
     return credentials.username
 
 
-@app.get("/")
-def home(username: str = Depends(get_current_username)):
-    return {"username": username}
+@app.get("/", response_class=HTMLResponse)
+def index(request:Request, username: str = Depends(get_current_username)):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/info/")
-async def findout(url: str, location: str, username: str = Depends(get_current_username)):
-    return {'url': url, 'location': location}
+async def findout(request: Request, url: str, location: str, username: str = Depends(get_current_username)):
+    return templates.TemplateResponse("response.html", {'request': request, 'url': url, 'location': location})
