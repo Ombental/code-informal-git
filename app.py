@@ -28,9 +28,11 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 
 
 @app.get("/", response_class=HTMLResponse)
-def index(request:Request, username: str = Depends(get_current_username)):
+def index(request: Request, username: str = Depends(get_current_username)):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
+# TODO: add logic here + CHANGE response.html
 @app.get("/info/")
 async def findout(request: Request, url: str, location: str, username: str = Depends(get_current_username)):
     return templates.TemplateResponse("response.html", {'request': request, 'url': url, 'location': location})
